@@ -1,0 +1,42 @@
+<!-- src/app/components/pet-card/pet-card.component.html -->
+<div class="pet-card animate__animated animate__fadeIn">
+  <div class="pet-card__header">
+    <div class="pet-card__icon">
+      <lucide-icon [name]="Heart" size="24" />
+    </div>
+    <h3 class="pet-card__name">{{ pet().nombre }}</h3>
+  </div>
+  
+  <div class="pet-card__body">
+    <div class="pet-card__info">
+      <span class="pet-card__label">Raza:</span>
+      <span class="pet-card__value">{{ pet().raza }}</span>
+    </div>
+    <div class="pet-card__info">
+      <span class="pet-card__label">Edad:</span>
+      <span class="pet-card__value">{{ pet().edad }} {{ pet().edad === 1 ? 'año' : 'años' }}</span>
+    </div>
+  </div>
+  
+  <div class="pet-card__actions">
+    <button 
+      type="button"
+      class="pet-card__button pet-card__button--edit"
+      (click)="handleEdit()"
+      aria-label="Editar mascota"
+    >
+      <lucide-icon [name]="Edit" size="18" />
+      <span>Editar</span>
+    </button>
+    <button 
+      type="button"
+      class="pet-card__button pet-card__button--delete"
+      (click)="handleDelete()"
+      aria-label="Eliminar mascota"
+    >
+      <lucide-icon [name]="Trash2" size="18" />
+      <span>Eliminar</span>
+    </button>
+  </div>
+</div>
+

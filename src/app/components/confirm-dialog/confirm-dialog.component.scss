@@ -1,0 +1,138 @@
+// src/app/components/confirm-dialog/confirm-dialog.component.scss
+@use '../../../styles/variables' as *;
+@use 'sass:color';
+
+.confirm-dialog {
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  &__container {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 420px;
+    width: 100%;
+    padding: 2rem;
+    position: relative;
+
+    &--danger {
+      .confirm-dialog__icon-wrapper {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+      }
+    }
+
+    &--warning {
+      .confirm-dialog__icon-wrapper {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+    }
+
+    &--info {
+      .confirm-dialog__icon-wrapper {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139, 92, 246, 0.1);
+    color: $color-primary;
+  }
+
+  &__title {
+    font-family: $font-primary;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $color-text-primary;
+    margin: 0;
+  }
+
+  &__message {
+    font-family: $font-secondary;
+    font-size: 1rem;
+    color: $color-text-secondary;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-family: $font-secondary;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+
+    &--cancel {
+      background: $color-background-secondary;
+      color: $color-text-secondary;
+
+      &:hover {
+        background: color.adjust($color-background-secondary, $lightness: -5%);
+        transform: translateY(-1px);
+      }
+    }
+
+    &--confirm {
+      background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &--danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+        &:hover {
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+      }
+    }
+  }
+}
+

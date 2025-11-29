@@ -1,0 +1,186 @@
+<!-- src/app/components/pet-list/pet-list.component.html -->
+<div class="pet-list">
+  <div class="pet-list__header">
+    <h2 class="pet-list__title">Listado de mascotas</h2>
+    
+    <div class="pet-list__controls">
+      <div class="pet-list__search-wrapper">
+        <lucide-icon [name]="Search" size="20" class="pet-list__search-icon" />
+        <input
+          type="text"
+          class="pet-list__search"
+          placeholder="Buscar por nombre, raza o edad..."
+          [value]="searchQuery()"
+          (input)="onSearchChange($event)"
+        />
+      </div>
+
+      @if (uniqueBreeds().length > 0) {
+        <div class="pet-list__filter-wrapper">
+          <lucide-icon [name]="Filter" size="20" class="pet-list__filter-icon" />
+          <select
+            class="pet-list__filter"
+            [value]="selectedBreed()"
+            (change)="onBreedFilterChange($event)"
+          >
+            <option value="all">Todas las razas</option>
+            @for (breed of uniqueBreeds(); track breed) {
+              <option [value]="breed">{{ breed }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      @if (searchQuery() || selectedBreed() !== 'all' || sortField()) {
+        <button
+          type="button"
+          class="pet-list__clear-button"
+          (click)="clearFilters()"
+        >
+          Limpiar
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="pet-list__skeleton animate__animated animate__fadeIn">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="pet-list__skeleton-item">
+          <div class="pet-list__skeleton-line pet-list__skeleton-line--title"></div>
+          <div class="pet-list__skeleton-line pet-list__skeleton-line--subtitle"></div>
+          <div class="pet-list__skeleton-line pet-list__skeleton-line--short"></div>
+        </div>
+      }
+    </div>
+  }
+
+  @else if (!isLoading() && filteredAndSortedPets().length === 0) {
+    <div class="pet-list__empty animate__animated animate__fadeIn">
+      <div class="pet-list__empty-icon">
+        <lucide-icon [name]="Heart" size="64" />
+      </div>
+      <h3 class="pet-list__empty-title">
+        @if (pets().length === 0) {
+          No hay mascotas registradas
+        } @else {
+          No se encontraron resultados
+        }
+      </h3>
+      <p class="pet-list__empty-message">
+        @if (pets().length === 0) {
+          ¡Comienza agregando tu primera mascota!
+        } @else {
+          Intenta ajustar los filtros de búsqueda
+        }
+      </p>
+    </div>
+  }
+
+  @else {
+    @if (isMobile()) {
+      <div class="pet-list__cards">
+        @for (pet of filteredAndSortedPets(); track pet.id; let i = $index) {
+          <div class="animate__animated animate__fadeInUp" [style.animation-delay]="(i * 100) + 'ms'">
+            <app-pet-card
+              [pet]="pet"
+              (onEdit)="handleEdit($event)"
+              (onDelete)="handleDelete($event)"
+            />
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="pet-list__table-wrapper animate__animated animate__fadeIn">
+        <table class="pet-list__table">
+          <thead class="pet-list__thead">
+            <tr class="pet-list__tr">
+              <th class="pet-list__th">
+                <button
+                  type="button"
+                  class="pet-list__sort-button"
+                  (click)="onSort('nombre')"
+                >
+                  <span>Nombre</span>
+                  <lucide-icon [name]="getSortIcon('nombre')" size="16" />
+                </button>
+              </th>
+              <th class="pet-list__th">
+                <button
+                  type="button"
+                  class="pet-list__sort-button"
+                  (click)="onSort('raza')"
+                >
+                  <span>Raza</span>
+                  <lucide-icon [name]="getSortIcon('raza')" size="16" />
+                </button>
+              </th>
+              <th class="pet-list__th">
+                <button
+                  type="button"
+                  class="pet-list__sort-button"
+                  (click)="onSort('edad')"
+                >
+                  <span>Edad</span>
+                  <lucide-icon [name]="getSortIcon('edad')" size="16" />
+                </button>
+              </th>
+              <th class="pet-list__th pet-list__th--actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="pet-list__tbody">
+            @for (pet of filteredAndSortedPets(); track pet.id; let i = $index) {
+              <tr class="pet-list__tr pet-list__tr--data animate__animated animate__fadeInUp" [style.animation-delay]="(i * 50) + 'ms'">
+                <td class="pet-list__td pet-list__td--name">
+                  <div class="pet-list__name-cell">
+                    <div class="pet-list__name-icon">
+                      <lucide-icon [name]="Heart" size="18" />
+                    </div>
+                    <span class="pet-list__name-text">{{ pet.nombre }}</span>
+                  </div>
+                </td>
+                <td class="pet-list__td">{{ pet.raza }}</td>
+                <td class="pet-list__td">
+                  <span class="pet-list__age-badge">{{ pet.edad }} {{ pet.edad === 1 ? 'año' : 'años' }}</span>
+                </td>
+                <td class="pet-list__td pet-list__td--actions">
+                  <div class="pet-list__actions">
+                    <button
+                      type="button"
+                      class="pet-list__action-button pet-list__action-button--edit"
+                      (click)="handleEdit(pet)"
+                      aria-label="Editar {{ pet.nombre }}"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      class="pet-list__action-button pet-list__action-button--delete"
+                      (click)="handleDelete(pet)"
+                      aria-label="Eliminar {{ pet.nombre }}"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  @if (!isLoading() && filteredAndSortedPets().length > 0) {
+    <div class="pet-list__footer">
+      <p class="pet-list__count">
+        Mostrando {{ filteredAndSortedPets().length }} 
+        {{ filteredAndSortedPets().length === 1 ? 'mascota' : 'mascotas' }}
+        @if (searchQuery() || selectedBreed() !== 'all') {
+          <span class="pet-list__count-filtered">(filtradas)</span>
+        }
+      </p>
+    </div>
+  }
+</div>
+

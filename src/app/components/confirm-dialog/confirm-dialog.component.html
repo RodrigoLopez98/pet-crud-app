@@ -1,0 +1,42 @@
+<!-- src/app/components/confirm-dialog/confirm-dialog.component.html -->
+@if (isOpen()) {
+  <div 
+    class="confirm-dialog__backdrop animate__animated animate__fadeIn"
+    (click)="onBackdropClick($event)"
+  >
+    <div 
+      class="confirm-dialog__container animate__animated animate__slideInUp"
+      [class.confirm-dialog__container--danger]="type() === 'danger'"
+      [class.confirm-dialog__container--warning]="type() === 'warning'"
+      [class.confirm-dialog__container--info]="type() === 'info'"
+    >
+      <div class="confirm-dialog__header">
+        <div class="confirm-dialog__icon-wrapper">
+          <lucide-icon [name]="TriangleAlert" size="24" />
+        </div>
+        <h3 class="confirm-dialog__title">{{ title() }}</h3>
+      </div>
+      
+      <p class="confirm-dialog__message">{{ message() }}</p>
+      
+      <div class="confirm-dialog__actions">
+        <button 
+          type="button"
+          class="confirm-dialog__button confirm-dialog__button--cancel"
+          (click)="onCancel()"
+        >
+          {{ cancelText() }}
+        </button>
+        <button 
+          type="button"
+          class="confirm-dialog__button confirm-dialog__button--confirm"
+          [class.confirm-dialog__button--danger]="type() === 'danger'"
+          (click)="onConfirm()"
+        >
+          {{ confirmText() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+

@@ -1,0 +1,46 @@
+<!-- src/app/pages/home/home.component.html -->
+<div class="home">
+  <header class="home__header">
+    <h1 class="home__title">Mis Mascotas    </h1>
+  </header>
+
+  <main class="home__main">
+    <app-pet-list
+      [pets]="petService.pets()"
+      [isLoading]="false"
+      (onEdit)="onEditPet($event)"
+      (onDelete)="onDeletePet($event)"
+    />
+  </main>
+
+  <button
+    type="button"
+    class="home__fab animate__animated animate__bounceIn"
+    (click)="openForm()"
+    aria-label="Agregar mascota"
+  >
+    <lucide-icon [name]="Plus" size="28" />
+    <span class="home__fab-text">Agregar mascota</span>
+  </button>
+
+  <app-pet-form
+    [isOpen]="isFormOpen()"
+    [pet]="selectedPet()"
+    (saved)="onPetSaved($event)"
+    (cancelled)="closeForm()"
+  />
+
+  <app-confirm-dialog
+    [isOpen]="isDeleteDialogOpen()"
+    title="Eliminar mascota"
+    [message]="'¿Estás seguro de que deseas eliminar a ' + (selectedPet()?.nombre || '') + '? Esta acción no se puede deshacer.'"
+    confirmText="Eliminar"
+    cancelText="Cancelar"
+    type="danger"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  />
+
+  <app-notification />
+</div>
+

@@ -1,0 +1,107 @@
+<!-- src/app/components/pet-form/pet-form.component.html -->
+@if (isOpen()) {
+  <div 
+    class="pet-form__backdrop animate__animated animate__fadeIn"
+    (click)="onBackdropClick($event)"
+  >
+    <div 
+      class="pet-form__container animate__animated animate__slideInUp"
+    >
+      <div class="pet-form__header">
+        <h2 class="pet-form__title">
+          {{ isEditMode() ? 'Editar mascota' : 'Agregar nueva mascota' }}
+        </h2>
+        <button 
+          type="button"
+          class="pet-form__close-button"
+          (click)="onCancel()"
+          aria-label="Cerrar"
+        >
+          <lucide-icon [name]="X" size="20" />
+        </button>
+      </div>
+
+      <form [formGroup]="petForm" (ngSubmit)="onSubmit()" class="pet-form__form">
+        <div class="pet-form__field">
+          <label for="nombre" class="pet-form__label">
+            Nombre <span class="pet-form__required">*</span>
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            class="pet-form__input"
+            [class.pet-form__input--error]="nombre?.invalid && nombre?.touched"
+            placeholder="Ej: Max, Luna, Rocky..."
+            autocomplete="off"
+          />
+          @if (nombre?.invalid && nombre?.touched) {
+            <span class="pet-form__error">{{ getErrorMessage('nombre') }}</span>
+          }
+        </div>
+
+        <div class="pet-form__field">
+          <label for="raza" class="pet-form__label">
+            Raza <span class="pet-form__required">*</span>
+          </label>
+          <input
+            id="raza"
+            type="text"
+            formControlName="raza"
+            class="pet-form__input"
+            [class.pet-form__input--error]="raza?.invalid && raza?.touched"
+            placeholder="Ej: Golden Retriever, Persa, Canario..."
+            autocomplete="off"
+          />
+          @if (raza?.invalid && raza?.touched) {
+            <span class="pet-form__error">{{ getErrorMessage('raza') }}</span>
+          }
+        </div>
+
+        <div class="pet-form__field">
+          <label for="edad" class="pet-form__label">
+            Edad (años) <span class="pet-form__required">*</span>
+          </label>
+          <input
+            id="edad"
+            type="number"
+            formControlName="edad"
+            class="pet-form__input"
+            [class.pet-form__input--error]="edad?.invalid && edad?.touched"
+            placeholder="Ej: 2, 5, 10..."
+            min="0"
+            max="30"
+            autocomplete="off"
+          />
+          @if (edad?.invalid && edad?.touched) {
+            <span class="pet-form__error">{{ getErrorMessage('edad') }}</span>
+          }
+        </div>
+
+        <div class="pet-form__actions">
+          <button 
+            type="button"
+            class="pet-form__button pet-form__button--cancel"
+            (click)="onCancel()"
+            [disabled]="isSubmitting()"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit"
+            class="pet-form__button pet-form__button--submit"
+            [disabled]="petForm.invalid || isSubmitting()"
+          >
+            @if (isSubmitting()) {
+              <lucide-icon [name]="Loader" size="18" class="pet-form__spinner" />
+            } @else {
+              <lucide-icon [name]="Save" size="18" />
+            }
+            <span>{{ isEditMode() ? 'Actualizar' : 'Guardar' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+

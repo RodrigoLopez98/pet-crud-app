@@ -1,0 +1,25 @@
+<!-- src/app/components/notification/notification.component.html -->
+<div class="notification-container">
+  @for (notification of notificationService.notifications(); track notification.id) {
+    <div 
+      class="notification animate__animated animate__slideInDown"
+      [class.notification--success]="notification.type === 'success'"
+      [class.notification--error]="notification.type === 'error'"
+      [class.notification--info]="notification.type === 'info'"
+    >
+      <div class="notification__icon">
+        <lucide-icon [name]="getIcon(notification.type)" size="20" />
+      </div>
+      <p class="notification__message">{{ notification.message }}</p>
+      <button
+        type="button"
+        class="notification__close"
+        (click)="remove(notification.id)"
+        aria-label="Cerrar notificación"
+      >
+        <lucide-icon [name]="X" size="16" />
+      </button>
+    </div>
+  }
+</div>
+
