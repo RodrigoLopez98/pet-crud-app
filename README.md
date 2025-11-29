@@ -2,6 +2,21 @@
 
 **Repository:** [https://github.com/RodrigoLopez98/pet-crud-app](https://github.com/RodrigoLopez98/pet-crud-app)
 
+## Getting Started
+
+**Requisitos:** Se recomienda usar Node.js versión > 22.
+
+Para comenzar con el proyecto, sigue estos pasos:
+
+```bash
+git clone https://github.com/RodrigoLopez98/pet-crud-app.git
+cd pet-crud-app
+npm i
+npm start
+```
+
+Una vez que el servidor esté en ejecución, abre tu navegador y navega a `http://localhost:4200/`. La aplicación se recargará automáticamente cuando modifiques cualquier archivo fuente.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
 
 ## Development server
